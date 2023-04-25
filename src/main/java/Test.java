@@ -1,3 +1,6 @@
+import model.ImageModel;
+import tools.FileHelper;
+
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -26,11 +29,15 @@ public class Test extends JPanel {
     }
 
     public static void main(String[] args) {
-        JFrame frame = new JFrame();
+        FileHelper.getFile();
+        PixelProcessor pixelProcessor = new PixelProcessor();
+        ImageModel imageModel = new ImageModel(FileHelper.getFile().get(0).getAbsolutePath());
+        pixelProcessor.process(imageModel.getImage());
+        /*JFrame frame = new JFrame();
         frame.getContentPane().add(new Test());
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(200, 200);
-        frame.setVisible(true);
+        frame.setVisible(true);*/
     }
 }
