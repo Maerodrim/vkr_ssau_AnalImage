@@ -1,4 +1,6 @@
 import model.ImageModel;
+import processors.GraphProcessor;
+import processors.figure.AxiconProcessor;
 import tools.FileHelper;
 
 import java.awt.Graphics;
@@ -29,7 +31,7 @@ public class Test extends JPanel {
 
     public static void main(String[] args) {
         /*FileHelper.getFile();
-        PixelProcessor pixelProcessor = new PixelProcessor();
+        processors.PixelProcessor pixelProcessor = new processors.PixelProcessor();
         ImageModel imageModel = new ImageModel(FileHelper.getFile().get(0).getAbsolutePath());
         pixelProcessor.process(imageModel.getImage());*/
 
@@ -37,7 +39,10 @@ public class Test extends JPanel {
 
         JFrame frame = new JFrame();
         //frame.getContentPane().add(new Test());
-        frame.getContentPane().add(graphProcessor.createDemoPanel());
+        AxiconProcessor axiconProcessor = new AxiconProcessor();
+        FileHelper.getFile();
+        ImageModel imageModel = new ImageModel(FileHelper.getFile().get(0).getAbsolutePath());
+        frame.getContentPane().add(graphProcessor.createDemoPanel(axiconProcessor.process(imageModel.getImage())));
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(200, 200);
         frame.setVisible(true);

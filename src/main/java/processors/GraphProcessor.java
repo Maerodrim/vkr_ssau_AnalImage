@@ -1,17 +1,14 @@
+package processors;
+
 import javafx.util.Pair;
 import model.ImageModel;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.axis.DateAxis;
-import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
-import org.jfree.data.time.Month;
-import org.jfree.data.time.TimeSeries;
-import org.jfree.data.time.TimeSeriesCollection;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
@@ -20,8 +17,7 @@ import tools.FileHelper;
 
 import javax.swing.*;
 import java.awt.*;
-import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
+import java.util.LinkedList;
 import java.util.List;
 
 public class GraphProcessor {
@@ -31,16 +27,25 @@ public class GraphProcessor {
     public JPanel createDemoPanel() {
 
         FileHelper.getFile();
-        ImageModel imageModel = new ImageModel(FileHelper.getFile().get(0).getAbsolutePath());
+        ImageModel imageModel = new ImageModel(FileHelper.getFile().get(2).getAbsolutePath());
         List<Pair<Integer, Integer>> points = pixelProcessor.process(imageModel.getImage());
+        List<List<Pair<Integer, Integer>>> charts = new LinkedList();
+        charts.add(points);
+        return getjPanel(charts);
+    }
 
-        JFreeChart chart = createChart(createDataset(points));
+    private JPanel getjPanel(List<List<Pair<Integer, Integer>>> charts) {
+        JFreeChart chart = createChart(createDataset(charts));
         chart.setPadding(new RectangleInsets(4, 8, 2, 2));
         ChartPanel panel = new ChartPanel(chart);
         panel.setFillZoomRectangle(true);
         panel.setMouseWheelEnabled(true);
-        panel.setPreferredSize(new Dimension(600, 300));
+        panel.setPreferredSize(new Dimension(900, 900));
         return panel;
+    }
+
+    public JPanel createDemoPanel(List<List<Pair<Integer, Integer>>> charts) {
+        return getjPanel(charts);
     }
 
     private XYSeries createSeries(List<Pair<Integer, Integer>> points) {
@@ -51,14 +56,17 @@ public class GraphProcessor {
         return s1;
     }
 
-    private XYDataset createDataset(List<Pair<Integer, Integer>> points) {
-        XYSeries s1 = new XYSeries("График №1");
-        for (Pair point : points) {
-            s1.add(Double.parseDouble(point.getKey().toString()), Double.parseDouble(point.getValue().toString()));
-        }
-
+    private XYDataset createDataset(List<List<Pair<Integer, Integer>>> charts) {
         XYSeriesCollection dataset = new XYSeriesCollection();
-        dataset.addSeries(s1);
+        int i = 0;
+        for (List<Pair<Integer, Integer>> points : charts) {
+            XYSeries s1 = new XYSeries("График " + i);
+            for (Pair point : points) {
+                s1.add(Double.parseDouble(point.getKey().toString()), Double.parseDouble(point.getValue().toString()));
+            }
+            i++;
+            dataset.addSeries(s1);
+        }
         return dataset;
     }
 
@@ -75,7 +83,6 @@ public class GraphProcessor {
         );
 
         chart.setBackgroundPaint(Color.white);
-
         XYPlot plot = (XYPlot) chart.getPlot();
         plot.setBackgroundPaint(Color.lightGray);
         plot.setDomainGridlinePaint(Color.white);

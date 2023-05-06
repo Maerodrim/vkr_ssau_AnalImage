@@ -1,3 +1,5 @@
+package processors;
+
 import javafx.util.Pair;
 import model.ImageModel;
 
@@ -11,7 +13,7 @@ import java.util.List;
 
 public class PixelProcessor {
 
-    private HashMap<Color, Integer> etalonColor = new HashMap<Color, Integer>();
+    private HashMap<Color, Double> etalonColor = new HashMap<Color, Double>();
 
     public PixelProcessor() {
         initEtalon();
@@ -23,12 +25,12 @@ public class PixelProcessor {
             int height = image.getHeight();
             List<Pair<Integer, Integer>> graphPoints = new LinkedList<>();
             for (int i = 0; i < height; i++) {
-                Integer ads = 0;
+                Double ads = 0.;
                 //for (int j = 0; j < width; j++) {
-                Color c = new Color(image.getRGB(width / 2, i));
+                Color c = new Color(image.getRGB(i, height / 2 + 25));
                 ads += getAbs(c);
                 //}
-                graphPoints.add(new Pair<>(i, ads));
+                graphPoints.add(new Pair<>(i, ads.intValue()));
             }
             return graphPoints;
         } catch (Exception e) {
@@ -42,7 +44,7 @@ public class PixelProcessor {
         processEtalon(imageModel.getImage());
     }
 
-    private int getAbs(Color c) {
+    public Double getAbs(Color c) {
         if (etalonColor.containsKey(c)) {
             return etalonColor.get(c);
         } else {
@@ -82,10 +84,11 @@ public class PixelProcessor {
         try {
             int width = image.getWidth();
             int height = image.getHeight();
-            for (int i = height-1; i > 0; i--) {
-                Color c = new Color(image.getRGB(width/2, i));
-                System.out.println(c.toString());
-                if (!etalonColor.containsKey(c)) this.etalonColor.put(c, i * 15);
+            Double w = 1500.0;
+            for (int i = 0; i < height; i++) {
+                Color c = new Color(image.getRGB(width / 2, i));
+                System.out.println(c.toString() + "  " + w / (2*i + 10));
+                if (!etalonColor.containsKey(c)) this.etalonColor.put(c, w - 5*i);
             }
         } catch (Exception e) {
             System.out.println(e.getCause().toString());
