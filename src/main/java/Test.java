@@ -1,11 +1,14 @@
 import model.ImageModel;
 import processors.GraphProcessor;
 import processors.figure.AxiconProcessor;
+import processors.figure.PlateProcessor;
 import tools.FileHelper;
 
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -30,20 +33,20 @@ public class Test extends JPanel {
     }
 
     public static void main(String[] args) {
-        /*FileHelper.getFile();
-        processors.PixelProcessor pixelProcessor = new processors.PixelProcessor();
-        ImageModel imageModel = new ImageModel(FileHelper.getFile().get(0).getAbsolutePath());
-        pixelProcessor.process(imageModel.getImage());*/
-
         GraphProcessor graphProcessor = new GraphProcessor();
-
-        JFrame frame = new JFrame();
-        //frame.getContentPane().add(new Test());
+        String plate = "plate";
+        String axicon = "axicon";
+        String waveguide = "waveguide";
+        PlateProcessor plateProcessor = new PlateProcessor();
         AxiconProcessor axiconProcessor = new AxiconProcessor();
-        ImageModel imageModel = new ImageModel(FileHelper.getFile("axicon").get(1).getAbsolutePath());
-        frame.getContentPane().add(graphProcessor.createDemoPanel(axiconProcessor.process(imageModel.getImage())));
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(200, 200);
-        frame.setVisible(true);
+
+        for (File file : FileHelper.getFile(plate)) {
+            JFrame frame = new JFrame();
+            ImageModel imageModel = new ImageModel(file.getAbsolutePath());
+            frame.getContentPane().add(graphProcessor.createDemoPanel(plateProcessor.process(imageModel.getImage())));
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.setSize(200, 200);
+            frame.setVisible(true);
+        }
     }
 }

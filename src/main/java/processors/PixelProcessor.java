@@ -56,7 +56,7 @@ public class PixelProcessor {
                     minDistance = distance(c, color);
                 }
             }
-            etalonColor.put(c, etalonColor.get(minColor) + 1);
+            etalonColor.put(c, etalonColor.get(minColor) + 0.1);
             return etalonColor.get(c);
         }
     }
@@ -85,7 +85,7 @@ public class PixelProcessor {
             int width = image.getWidth();
             Double height = Double.parseDouble(String.valueOf(image.getHeight()));
             System.out.println("width " + width + " height " + height);
-            Double w = 100.0;
+            Double w = 95.0;
             for (int i = 0; i < height.intValue(); i++) {
                 Color c = new Color(image.getRGB(width / 2, i));
                 Double value = w * ((height - i) / height);
