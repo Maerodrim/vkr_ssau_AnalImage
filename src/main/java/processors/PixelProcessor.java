@@ -83,12 +83,14 @@ public class PixelProcessor {
     private void processEtalon(BufferedImage image) {
         try {
             int width = image.getWidth();
-            int height = image.getHeight();
-            Double w = 1500.0;
-            for (int i = 0; i < height; i++) {
+            Double height = Double.parseDouble(String.valueOf(image.getHeight()));
+            System.out.println("width " + width + " height " + height);
+            Double w = 100.0;
+            for (int i = 0; i < height.intValue(); i++) {
                 Color c = new Color(image.getRGB(width / 2, i));
-                System.out.println(c.toString() + "  " + w / (2*i + 10));
-                if (!etalonColor.containsKey(c)) this.etalonColor.put(c, w - 5*i);
+                Double value = w * ((height - i) / height);
+                System.out.println(c.toString() + "  " + value);
+                if (!etalonColor.containsKey(c)) this.etalonColor.put(c, value);
             }
         } catch (Exception e) {
             System.out.println(e.getCause().toString());

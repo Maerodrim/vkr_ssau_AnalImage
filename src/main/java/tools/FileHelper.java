@@ -6,8 +6,8 @@ import java.util.List;
 
 public class FileHelper {
 
-    public static List<File> getFile() {
-        File dir = new File("image");
+    public static List<File> getFile(String path) {
+        File dir = new File("image/" + path);
         List<File> imageList = new LinkedList<>();
         if (dir.isDirectory()) {
             // получаем все вложенные объекты в каталоге

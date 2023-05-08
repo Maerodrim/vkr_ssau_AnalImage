@@ -14,32 +14,23 @@ public class AxiconProcessor implements Processor {
     private PixelProcessor pixelProcessor = new PixelProcessor();
 
     @Override
-    public List<List<Pair<Integer, Integer>>> process(BufferedImage image) {
-        List<List<Pair<Integer, Integer>>> charts = new LinkedList<>();
+    public List<List<Pair<Double, Double>>> process(BufferedImage image) {
+        List<List<Pair<Double, Double>>> charts = new LinkedList<>();
         try {
             int width = image.getWidth();
             int height = image.getHeight();
-            List<Pair<Integer, Integer>> graphPoints = new LinkedList<>();
+            List<Pair<Double, Double>> graphPoints = new LinkedList<>();
+            Double max = 0.;
             for (int i = 0; i < height; i++) {
                 Double ads = 0.;
-                //for (int j = 0; j < width; j++) {
                 Color c = new Color(image.getRGB(width / 2, i));
                 ads += pixelProcessor.getAbs(c);
-                //}
-                graphPoints.add(new Pair<>(i, ads.intValue()));
+                if (max < ads) max = ads;
+                graphPoints.add(new Pair<Double, Double>(getX(i, height), ads));
             }
             charts.add(graphPoints);
-            int maxHeight = getMaxHeight(graphPoints);
-            List<Pair<Integer, Integer>> graphPointsNew = new LinkedList<>();
-            for (int j = 0; j < width; j++) {
-                Double ads = 0.;
-                //for (int j = 0; j < width; j++) {
-                Color c = new Color(image.getRGB(j, maxHeight));
-                ads += pixelProcessor.getAbs(c);
-                //}
-                graphPointsNew.add(new Pair<>(j, ads.intValue()));
-            }
-            charts.add(graphPointsNew);
+            charts.add(getLine(max, height));
+            charts.add(getLine(max / 2, height));
             return charts;
         } catch (Exception e) {
             System.out.println(e.getCause().toString());
@@ -47,13 +38,25 @@ public class AxiconProcessor implements Processor {
         }
     }
 
-    int getMaxHeight(List<Pair<Integer, Integer>> graphPoints) {
-        Pair<Integer, Integer> maxHeight = null;
-        for (Pair<Integer, Integer> point : graphPoints) {
+    Double getMaxHeight(List<Pair<Double, Double>> graphPoints) {
+        Pair<Double, Double> maxHeight = null;
+        for (Pair<Double, Double> point : graphPoints) {
             if (maxHeight == null || maxHeight.getValue() < point.getValue()) {
                 maxHeight = point;
             }
         }
         return maxHeight.getKey();
+    }
+
+    List<Pair<Double, Double>> getLine(Double level, int longLine) {
+        List<Pair<Double, Double>> graphPoints = new LinkedList<>();
+        for (int i = 0; i < longLine; i++) {
+            graphPoints.add(new Pair<Double, Double>(getX(i, longLine), level));
+        }
+        return graphPoints;
+    }
+
+    double getX(int i, int width) {
+        return 5.0 * i / width - 2.5;
     }
 }

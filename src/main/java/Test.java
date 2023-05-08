@@ -40,8 +40,7 @@ public class Test extends JPanel {
         JFrame frame = new JFrame();
         //frame.getContentPane().add(new Test());
         AxiconProcessor axiconProcessor = new AxiconProcessor();
-        FileHelper.getFile();
-        ImageModel imageModel = new ImageModel(FileHelper.getFile().get(0).getAbsolutePath());
+        ImageModel imageModel = new ImageModel(FileHelper.getFile("axicon").get(1).getAbsolutePath());
         frame.getContentPane().add(graphProcessor.createDemoPanel(axiconProcessor.process(imageModel.getImage())));
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(200, 200);

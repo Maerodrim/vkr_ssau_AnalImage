@@ -24,17 +24,7 @@ public class GraphProcessor {
 
     private PixelProcessor pixelProcessor = new PixelProcessor();
 
-    public JPanel createDemoPanel() {
-
-        FileHelper.getFile();
-        ImageModel imageModel = new ImageModel(FileHelper.getFile().get(2).getAbsolutePath());
-        List<Pair<Integer, Integer>> points = pixelProcessor.process(imageModel.getImage());
-        List<List<Pair<Integer, Integer>>> charts = new LinkedList();
-        charts.add(points);
-        return getjPanel(charts);
-    }
-
-    private JPanel getjPanel(List<List<Pair<Integer, Integer>>> charts) {
+    private JPanel getjPanel(List<List<Pair<Double, Double>>> charts) {
         JFreeChart chart = createChart(createDataset(charts));
         chart.setPadding(new RectangleInsets(4, 8, 2, 2));
         ChartPanel panel = new ChartPanel(chart);
@@ -44,7 +34,7 @@ public class GraphProcessor {
         return panel;
     }
 
-    public JPanel createDemoPanel(List<List<Pair<Integer, Integer>>> charts) {
+    public JPanel createDemoPanel(List<List<Pair<Double, Double>>> charts) {
         return getjPanel(charts);
     }
 
@@ -56,10 +46,10 @@ public class GraphProcessor {
         return s1;
     }
 
-    private XYDataset createDataset(List<List<Pair<Integer, Integer>>> charts) {
+    private XYDataset createDataset(List<List<Pair<Double, Double>>> charts) {
         XYSeriesCollection dataset = new XYSeriesCollection();
         int i = 0;
-        for (List<Pair<Integer, Integer>> points : charts) {
+        for (List<Pair<Double, Double>> points : charts) {
             XYSeries s1 = new XYSeries("График " + i);
             for (Pair point : points) {
                 s1.add(Double.parseDouble(point.getKey().toString()), Double.parseDouble(point.getValue().toString()));
@@ -71,10 +61,10 @@ public class GraphProcessor {
     }
 
     private JFreeChart createChart(XYDataset dataset) {
-        JFreeChart chart = ChartFactory.createXYAreaChart(
-                "Мощность",  // title
-                "координаты",                            // x-axis label
-                "мощность",                      // y-axis label
+        JFreeChart chart = ChartFactory.createXYLineChart(
+                "Отношения Мощности к координатам",  // title
+                "Координаты",                            // x-axis label
+                "Мощность в процентах",                      // y-axis label
                 dataset,                       // data
                 PlotOrientation.VERTICAL,
                 true,                          // create legend

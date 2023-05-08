@@ -6,5 +6,5 @@ import java.awt.image.BufferedImage;
 import java.util.List;
 
 public interface Processor {
-    List<List<Pair<Integer, Integer>>> process(BufferedImage image);
+    List<List<Pair<Double, Double>>> process(BufferedImage image);
 }
