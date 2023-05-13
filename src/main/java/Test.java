@@ -1,6 +1,7 @@
 import model.ImageModel;
 import processors.GraphProcessor;
 import processors.figure.AxiconProcessor;
+import processors.figure.EllipticalWaveguideProcessor;
 import processors.figure.PlateProcessor;
 import tools.FileHelper;
 
@@ -39,11 +40,11 @@ public class Test extends JPanel {
         String waveguide = "waveguide";
         PlateProcessor plateProcessor = new PlateProcessor();
         AxiconProcessor axiconProcessor = new AxiconProcessor();
-
-        for (File file : FileHelper.getFile(plate)) {
+        EllipticalWaveguideProcessor ellipticalWaveguideProcessor = new EllipticalWaveguideProcessor();
+        for (File file : FileHelper.getFile(waveguide)) {
             JFrame frame = new JFrame();
             ImageModel imageModel = new ImageModel(file.getAbsolutePath());
-            frame.getContentPane().add(graphProcessor.createDemoPanel(plateProcessor.process(imageModel.getImage())));
+            frame.getContentPane().add(graphProcessor.createDemoPanel(axiconProcessor.process(imageModel.getImage())));
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setSize(200, 200);
             frame.setVisible(true);

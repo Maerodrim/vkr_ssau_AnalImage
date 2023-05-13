@@ -6,6 +6,7 @@ import processors.Processor;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -29,6 +30,8 @@ public class EllipticalWaveguideProcessor implements Processor {
                 graphPoints.add(new Pair<Double, Double>(getX(i, height), ads));
             }
             charts.add(graphPoints);
+            System.out.println("height ");
+            analiseLine(graphPoints);
             graphPoints = new LinkedList<>();
             for (int j = 0; j < width; j++) {
                 Double ads = 0.;
@@ -37,7 +40,8 @@ public class EllipticalWaveguideProcessor implements Processor {
                 if (max < ads) max = ads;
                 graphPoints.add(new Pair<Double, Double>(getX(j, width), ads));
             }
-
+            System.out.println("width ");
+            analiseLine(graphPoints);
             charts.add(graphPoints);
             /*charts.add(getLine(max, height));
             charts.add(getLine(max / 2, height));*/
@@ -48,22 +52,15 @@ public class EllipticalWaveguideProcessor implements Processor {
         }
     }
 
-    Double getMaxHeight(List<Pair<Double, Double>> graphPoints) {
-        Pair<Double, Double> maxHeight = null;
-        for (Pair<Double, Double> point : graphPoints) {
-            if (maxHeight == null || maxHeight.getValue() < point.getValue()) {
-                maxHeight = point;
-            }
+    void analiseLine(List<Pair<Double, Double>> graphPoints) {
+        Double right = 0.0, left = 0.0;
+        for (int i = 0; i < graphPoints.size(); i++) {
+            if (i < (graphPoints.size() / 2))
+                left += Math.abs(graphPoints.get(i).getKey() * graphPoints.get(i).getValue());
+            else right += Math.abs(graphPoints.get(i).getKey() * graphPoints.get(i).getValue());
         }
-        return maxHeight.getKey();
-    }
-
-    List<Pair<Double, Double>> getLine(Double level, int longLine) {
-        List<Pair<Double, Double>> graphPoints = new LinkedList<>();
-        for (int i = 0; i < longLine; i++) {
-            graphPoints.add(new Pair<Double, Double>(getX(i, longLine), level));
-        }
-        return graphPoints;
+        System.out.println("Энергия справа и слева right =" + right + "  left = " +
+                left + "  right - left =" + Math.abs(right - left));
     }
 
     double getX(int i, int width) {

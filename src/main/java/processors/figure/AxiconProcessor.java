@@ -6,6 +6,7 @@ import processors.Processor;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -31,6 +32,7 @@ public class AxiconProcessor implements Processor {
             charts.add(graphPoints);
             charts.add(getLine(max, height));
             charts.add(getLine(max / 2, height));
+            analiseLine(graphPoints, max);
             return charts;
         } catch (Exception e) {
             System.out.println(e.getCause().toString());
@@ -58,5 +60,17 @@ public class AxiconProcessor implements Processor {
 
     double getX(int i, int width) {
         return 5.0 * i / width - 2.5;
+    }
+
+    void analiseLine(List<Pair<Double, Double>> graphPoints, Double max) {
+        List<Double> doubleList = new ArrayList<>();
+        for (int i = 1; i < graphPoints.size() - 1; i++) {
+            if ((graphPoints.get(i).getValue() == max / 2) ||
+                    (graphPoints.get(i - 1).getValue() < max / 2 && graphPoints.get(i + 1).getValue() > max / 2) ||
+                    (graphPoints.get(i - 1).getValue() > max / 2 && graphPoints.get(i + 1).getValue() < max / 2))
+                doubleList.add(graphPoints.get(i).getKey());
+        }
+        System.out.println("Размер фокусного окна " + doubleList.get(0) + "  " +
+                doubleList.get(doubleList.size() - 1) + "  " + (doubleList.get(doubleList.size() - 1) - doubleList.get(0)) + "  ");
     }
 }
